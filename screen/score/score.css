@@ -1,0 +1,49 @@
+#start{
+    position: absolute;
+    top: 100px;
+    right: 10px;
+    width: 30%;
+    height: 50px;
+    background-color:#ffffff;
+    border-color: #00f7ff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+h1{
+    font-size: 1.8rem;
+    color: #1c1e21;
+    margin-bottom: 2rem;
+    text-align: center;     /* 見出しとteフォーム要素の間の余白 */
+}
+
+#win{
+    color: red;
+}
+
+#conwin{
+    color: skyblue;
+}
+
+#scoreboard{
+    text-align: center;
+    margin-top: 150px;
+    border: 2px solid #000000;
+    padding: 20px;
+    border-radius: 6px;
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#start:hover{
+    background-color: #f0f2f5;
+    color: black;
+}
+
+.chart-container {
+    width: 600px;
+    margin: 50px auto; /* 真ん中寄せ */
+}
+

@@ -1,0 +1,39 @@
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f0f2f5; /* 背景を少しグレーに */
+    display: flex;
+    justify-content: center; /* 水平方向中央揃え */
+    align-items: center;     /* 垂直方向中央揃え */
+    height: 100vh;           /* 画面全体の高さを使用 */
+}
+
+div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 5px solid green;
+    width: 70%;
+    height: 50%;
+    border-radius: 6px;
+}
+
+#start{
+    position: absolute;
+    top: 100px;
+    right: 20px;
+    width: 30%;
+    height: 50px;
+    background-color:#ffffff;
+    border: 5px solid green;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#start:hover{
+    background-color: #f0f2f5;
+    color: red;
+    transform: translateY(-5px);
+}
