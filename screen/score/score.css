@@ -16,7 +16,7 @@ h1{
     color: #1c1e21;
     margin-bottom: 2rem;
     text-align: center;
-    background-color: #00f7ff;    /* 見出しとteフォーム要素の間の余白 */
+    background-color: #00f7ff;   
 }
 
 #win{
@@ -45,6 +45,6 @@ h1{
 
 .chart-container {
     width: 600px;
-    margin: 50px auto; /* 真ん中寄せ */
+    margin: 50px auto; 
 }
 
