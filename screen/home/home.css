@@ -12,8 +12,17 @@ body {
     width: 50%;
 }
 
-#register {
-    background-color: #ffffff; 
+#registerForm {
+    background-color: #32d612; 
+    padding: 2rem 3rem;        
+    border-radius: 8px;       
+    justify-content: center; 
+    align-items: center;          
+    margin: auto;
+}
+
+#loginForm{
+    background-color: aqua;
     padding: 2rem 3rem;        
     border-radius: 8px;       
     justify-content: center; 
@@ -62,7 +71,7 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: #166fe5; 
+    background-color: #01060c; 
 }
 
 a {
@@ -72,5 +81,18 @@ a {
 
 a:hover {
     text-decoration: underline; 
+}
+
+#loginButton,#registerButton{
+    color: #fff;
+    margin: 10px;
+    background-color: #1877f2;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#loginButton:hover,#registerButton:hover{
+    background-color: #01060c; 
 }
 

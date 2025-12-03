@@ -1,0 +1,54 @@
+body{
+  margin: 0;
+  text-align: center;
+}
+
+#dice{
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+#diceWindow1,#diceWindow2,#diceWindow3 {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border: 2px solid #333;
+  border-radius: 10px;
+  margin-bottom: 20px; /* ボタンとの隙間 */
+}
+
+.dice-strip {
+  width: 100px;
+  animation: roll 0.6s steps(6) infinite paused;
+}
+
+.dice-strip.moving {
+  animation-play-state: running; /* 再生 */
+}
+
+.dice-strip img {
+  width: 100px;
+  height: 100px;
+  display: block;
+}
+
+@keyframes roll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-600px); }
+}
+
+/* ボタンの見た目（お好みで） */
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 20px;
+}
+
+.none{
+  display: none;
+}
+
+select{
+  margin:20px;
+}

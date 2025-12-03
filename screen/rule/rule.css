@@ -19,7 +19,7 @@ div{
     border-radius: 6px;
 }
 
-#start{
+.matchingStart{
     position: absolute;
     top: 100px;
     right: 20px;
@@ -32,7 +32,7 @@ div{
     transition: all 0.3s ease;
 }
 
-#start:hover{
+.matchingStart:hover{
     background-color: #f0f2f5;
     color: red;
     transform: translateY(-5px);

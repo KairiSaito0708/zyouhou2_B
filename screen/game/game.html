@@ -6,9 +6,54 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ゲーム画面</title>
+    <link rel="stylesheet" href="game.css">
+    <script src="../screenmove.js" defer></script>
 </head>
 <body>
     <h1>ゲーム</h1>
+    <label for="diceSelect">サイコロの数</label><br>
+    <select name="" id="diceSelect">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
 
+    <div id="dice">
+    <div id="diceWindow1">
+      <div class="dice-strip" >
+    <img src="../images/1.png" alt="1">
+    <img src="../images/2.png" alt="2">
+    <img src="../images/3.png" alt="3">
+    <img src="../images/4.png" alt="4">
+    <img src="../images/5.png" alt="5">
+    <img src="../images/6.png" alt="6">
+  </div>
+</div>
+
+ <div id="diceWindow2" class='none'>
+  <div class="dice-strip" >
+    <img src="../images/2.png" alt="1">
+    <img src="../images/4.png" alt="2">
+    <img src="../images/3.png" alt="3">
+    <img src="../images/1.png" alt="4">
+    <img src="../images/6.png" alt="5">
+    <img src="../images/5.png" alt="6">
+  </div>
+</div>
+
+<div id="diceWindow3" class="none">
+  <div class="dice-strip" >
+    <img src="../images/2.png" alt="1">
+    <img src="../images/6.png" alt="2">
+    <img src="../images/5.png" alt="3">
+    <img src="../images/3.png" alt="4">
+    <img src="../images/1.png" alt="5">
+    <img src="../images/4.png" alt="6">
+  </div>
+ </div>
+</div>
+
+<button id="diceStart">サイコロスタート</button>
+<button id="gameEnd">ゲーム終了</button>
 </body>
 </html>

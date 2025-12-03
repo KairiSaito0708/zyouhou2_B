@@ -1,0 +1,51 @@
+body {
+  padding: 50px;
+  text-align: center;
+}
+
+.dice-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.dice-window {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.dice-strip {
+  width: 100px;
+  animation: roll steps(6) infinite paused;
+}
+
+.dice-1 { animation-duration: 0.4s; }
+.dice-2 { animation-duration: 0.6s; }
+.dice-3 { animation-duration: 0.5s; }
+
+
+.moving {
+  animation-play-state: running;
+}
+
+.dice-strip img {
+  width: 100px;
+  height: 100px;
+  display: block;
+}
+/* 動き */
+@keyframes roll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-600px); }
+}
+
+button {
+  padding: 15px 40px;
+  font-size: 20px;
+  cursor: pointer;
+  background-color:red;
+  color: white;
+  border-radius: 50px;
+}

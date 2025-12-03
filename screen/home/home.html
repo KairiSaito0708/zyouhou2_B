@@ -2,23 +2,36 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=, initial-scale=1.0">
     <title>アカウント登録</title>
     <link rel="stylesheet" href="home.css">
+    <script src="../screenmove.js" defer></script>
 </head>
 <body>
     <div id="container">
-        <div id="register">   
+        <div id="registerForm" style="display: block;">
             <h1 id="account">アカウント登録画面</h1>
             <label for="username">ユーザ名</label><br>
-            <input type="text" id="username" placeholder="ユーザ名"><br>
+            <input type="text" class="username" placeholder="ユーザ名"><br>
 
             <label for="password">パスワード</label><br>
             <input type="password" id="password" placeholder="パスワード"><br>
 
-            <input type="submit" value="アカウント作成"><br>
+            <input type="submit"  class="matchingStart" value="アカウント作成"><br>
 
-            既にアカウントお持ちの方は<a href="login.html">ログイン</a>
+            既にアカウントお持ちの方は<button id="loginButton">ログインへ</button>
+        </div>
+
+        <div id="loginForm" style="display: none;">
+            <h1>ログイン</h1>
+            <label for="username" >ユーザ名</label><br>
+            <input type="text" class="username" placeholder="ユーザ名"><br>
+        
+            <label for="password">パスワード</label><br>
+            <input type="password" class="password" placeholder="パスワード"><br>
+        
+            <input type="submit" class="matchingStart" value="ログイン"><br>
+            
+            アカウントお持ちでない方は<button id="registerButton">新規登録へ</button>
         </div>
     </div>
 </body>
