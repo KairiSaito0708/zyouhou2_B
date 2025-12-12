@@ -3,15 +3,14 @@ package com.example.application;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
-@Entity // ← 「これはデータベースのテーブルですよ」という目印
+@Entity 
 public class Account {
 
-    @Id // ← 「これがID（主キー）ですよ」という目印
+    @Id 
     private String username;
     
     private String password;
-
-    // 必須：空のコンストラクタ
+    
     public Account() {}
 
     public String getUsername() { return username; }

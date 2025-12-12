@@ -66,17 +66,8 @@ if(gameStart){
   })
 };
 
-if(rule){
-  rule.addEventListener('click',function(){
-    window.location.href = "rule.html" 
-  })
-};
 
-if(score){
-  score.addEventListener('click',function(){
-    window.location.href = "score.html" 
-  })
-};
+
 
 if(logout){
   logout.addEventListener('click',function(){
