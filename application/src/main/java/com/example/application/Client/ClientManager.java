@@ -4,6 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.application.ApplicationServer.CreditManager;
+import com.example.application.ApplicationServer.DiceController;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import java.util.Optional;
 import org.springframework.ui.Model;
@@ -13,7 +17,14 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ClientManager {
+    private DiceController diceController;
+    private CreditManager creditManager;
+    private int currentPosition = 0;
 
+    public ClientManager(DiceController diceController, CreditManager creditManager) {
+        this.diceController = diceController;
+        this.creditManager = creditManager;
+    }
     @Autowired
     private AccountRepository repository;
 
@@ -29,8 +40,18 @@ public class ClientManager {
     }
 
     @GetMapping("/game")
-    public String login() {
-        return "game";
+    public String index(Model model) {
+
+        // 1. サーバー側のデータをリセット
+        this.currentPosition = 0; 
+        creditManager.reset();
+
+        // 2. HTML側に初期値を渡す（Thymeleaf用）
+        model.addAttribute("earnedUnits", 0);
+        model.addAttribute("expectedUnits", 25);
+        model.addAttribute("result", "ダイスを振ってください");
+        
+        return "game"; // game.html を表示
     }
 
     @GetMapping("/score")
@@ -56,10 +77,11 @@ public class ClientManager {
         return "rule";
     }
 
-    @GetMapping("/result")
-    public String result() {
-        return "result";
-    }
+  // 結果画面を表示するためのエンドポイント
+@GetMapping("/result")
+public String showResult() {
+    return "result"; 
+}
 
 @GetMapping("/logout")
 public String logout(HttpSession session) {

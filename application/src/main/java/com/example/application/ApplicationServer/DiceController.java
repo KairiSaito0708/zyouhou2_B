@@ -1,22 +1,36 @@
 package com.example.application.ApplicationServer;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.stereotype.Service;
 import java.util.Random;
 
-@RestController
+@Service
 public class DiceController {
 
-    @GetMapping("/api/roll")
-    public Map<String, Object> rollDice() {
-        Random random = new Random();
-        int result = random.nextInt(6) + 1; // 1〜6を生成
+    private final Random random = new Random();
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("diceResult", result);
-        
-        return response;
+    /**
+     * ダイスを振るメインロジック
+     * @param itemType アイテムの種類 (DOUBLE, JUST, null)
+     * @param targetValue ジャストダイスの場合の狙う数字
+     * @return 最終的なダイスの合計値
+     */
+    public int executeRoll(String itemType, Integer targetValue) {
+        if ("JUST".equals(itemType) && targetValue != null) {
+            // ジャストダイス：指定された値をそのまま返す
+            return targetValue;
+        }
+
+        if ("DOUBLE".equals(itemType)) {
+            // ダブルダイス：2回振って合計を返す
+            return roll() + roll();
+        }
+
+        // 通常：1回振る
+        return roll();
+    }
+
+    // 純粋に1回だけ振る内部メソッド
+    public int roll() {
+        return random.nextInt(6) + 1;
     }
 }

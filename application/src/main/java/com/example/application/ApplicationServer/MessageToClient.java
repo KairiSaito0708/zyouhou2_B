@@ -9,8 +9,6 @@ public class MessageToClient {
     private int userId;
     private int expectedCredits;
     private int earnedCredits;
-    private int doubleDiceCount;
-    private int justDiceCount;
     private int currentPlace;
     private boolean isSkipped;
     private List<Integer> resultList;

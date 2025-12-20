@@ -1,88 +1,110 @@
-let currentCellIndex = 0;
-const totalCells = 20;
-let earnedUnits = 0;
-let expectedUnits = 100;
-
 /**
- * サイコロを振る
+ * game.js (4人対戦・同期対応版)
  */
-async function useItemAndRoll() {
-    const rollButton = document.getElementById('diceStart');
-    const diceResultText = document.getElementById('dice-result-text');
+let myPlayerId = new URLSearchParams(window.location.search).get('playerId');
+let roomId = new URLSearchParams(window.location.search).get('roomId');
+let localPlayerPositions = {};
 
-    if (rollButton) rollButton.disabled = true;
+console.log("取得した自分のID:", myPlayerId);// 前回の位置を記録して、移動を検知する
 
-    const roll = Math.floor(Math.random() * 6) + 1;
-    if (diceResultText) diceResultText.innerText = `${roll} が出ました！`;
+document.addEventListener('DOMContentLoaded', async () => {
+    const diceBtn = document.getElementById('diceStart');
+    const eventMessage = document.getElementById('event-message');
 
-    await movePlayerStepByStep(roll);
+    console.log(`自分のID: ${myPlayerId}, 部屋ID: ${roomId}`);
 
-    if (rollButton) rollButton.disabled = false;
-}
+    // --- 1. 初回：全プレイヤーの駒を生成 ---
+    const initialRes = await fetch(`/api/matching/status?roomId=${roomId}`);
+    const room = await initialRes.json();
+    setupPlayersUI(room.players);
 
-/**
- * 駒の移動と単位・ゴール判定
- */
-async function movePlayerStepByStep(steps) {
-    for (let i = 0; i < steps; i++) {
-        currentCellIndex = (currentCellIndex + 1) % totalCells;
-        updatePlayerPosition();
-        
-        // START(0番)を通過・着地したとき
-        if (currentCellIndex === 0) {
-            earnedUnits += expectedUnits;
-            
-            // 画面の数字を更新
-            const earnedDisplay = document.getElementById('earned-units');
-            if (earnedDisplay) earnedDisplay.innerText = earnedUnits;
+    // --- 2. 同期ループ：2秒おきに「誰か動いた？」と確認しに行く ---
+    setInterval(async () => {
+        const res = await fetch(`/api/matching/status?roomId=${roomId}`);
+        if (!res.ok) return;
+        const currentRoom = await res.json();
 
-            // --- 追加: 124単位判定 ---
-            if (earnedUnits >= 124) {
-                document.getElementById('event-message').innerText = "124単位達成！卒業確定です！";
-                // 少しだけ余韻を残してから移動
-                await new Promise(r => setTimeout(r, 1000));
-                window.location.href = "/result"; 
-                return; // 124超えたら移動するのでループを抜ける
-            }
+        // ターン管理：自分の番ならボタンを有効化
+        updateTurnStatus(currentRoom);
 
-            document.getElementById('event-message').innerText = "START通過！25単位獲得";
-            await new Promise(r => setTimeout(r, 400));
+        // 位置の同期：自分以外の駒が動いていたら画面上で動かす
+        syncPlayerPieces(currentRoom.players);
+
+        // 誰かが卒業していたら終了
+        if (currentRoom.players.some(p => p.earnedUnits >= 124)) {
+            location.href = "/result";
         }
-        await new Promise(r => setTimeout(r, 250));
-    }
-    document.getElementById('event-message').innerText = `${currentCellIndex}番のマスに停止中`;
-}
+    }, 2000);
 
-/**
- * 駒の座標更新
- */
-function updatePlayerPosition() {
-    const player = document.getElementById('player');
-    const target = document.getElementById(`cell-${currentCellIndex}`);
-    if (!player || !target) return;
-    
-    player.style.left = `${target.offsetLeft + (target.offsetWidth / 2) - (player.offsetWidth / 2)}px`;
-    player.style.top = `${target.offsetTop + (target.offsetHeight / 2) - (player.offsetHeight / 2)}px`;
-}
+    // --- 3. ダイスを振る処理 ---
+    diceBtn.addEventListener('click', async () => {
+        diceBtn.disabled = true;
+        eventMessage.innerText = "ダイスを振っています...";
 
-// 初期化（モーダル処理など）
-document.addEventListener('DOMContentLoaded', () => {
-    const statusBtn = document.getElementById('status');
-    const modal = document.getElementById('statusModal');
-    
-    if (statusBtn) {
-        statusBtn.onclick = () => {
-            document.getElementById('modal-pos').innerText = currentCellIndex;
-            document.getElementById('modal-earned').innerText = earnedUnits;
-            document.getElementById('modal-expected').innerText = expectedUnits;
-            if (modal) modal.style.display = "block";
-        };
-    }
-    
-    const closeBtn = document.getElementById('closeModal');
-    if (closeBtn) {
-        closeBtn.onclick = () => { if (modal) modal.style.display = "none"; };
-    }
-
-    updatePlayerPosition();
+        const url = `/api/game/roll?roomId=${roomId}&playerId=${myPlayerId}`;
+        try {
+            const res = await fetch(url, { method: 'POST' });
+            if (!res.ok) throw new Error(await res.text());
+            
+            const data = await res.json();
+            console.log(`${data.rolledNumber} が出ました！`);
+            // 自分の移動アニメーションはポーリング側で自動的に処理されます
+        } catch (error) {
+            alert(error.message);
+            diceBtn.disabled = false;
+        }
+    });
 });
+
+function setupPlayersUI(players) {
+    const container = document.querySelector('.board-container');
+    players.forEach((p, i) => {
+        if (!document.getElementById(`player-${p.id}`)) {
+            const piece = document.createElement('div');
+            piece.id = `player-${p.id}`;
+            piece.className = `player-piece p${i}`; // CSSでp0~p3の色を設定
+            piece.innerText = p.name.substring(0, 1);
+            container.appendChild(piece);
+        }
+        localPlayerPositions[p.id] = p.currentPosition;
+        updatePieceVisual(p.id, p.currentPosition);
+    });
+}
+
+function updateTurnStatus(room) {
+    const diceBtn = document.getElementById('diceStart');
+    const eventMessage = document.getElementById('event-message');
+    const currentPlayer = room.players[room.turnIndex];
+
+    if (currentPlayer.id === myPlayerId) {
+        diceBtn.disabled = false;
+        eventMessage.innerText = "あなたの番です！";
+        diceBtn.style.boxShadow = "0 0 15px #f1c40f"; // 光らせる
+    } else {
+        diceBtn.disabled = true;
+        eventMessage.innerText = `${currentPlayer.name}さんの番です...`;
+        diceBtn.style.boxShadow = "none";
+    }
+}
+
+function syncPlayerPieces(players) {
+    players.forEach(p => {
+        // サーバー上の位置が、手元の記録と違っていたら移動させる
+        if (localPlayerPositions[p.id] !== p.currentPosition) {
+            console.log(`${p.name}が移動しました`);
+            updatePieceVisual(p.id, p.currentPosition);
+            localPlayerPositions[p.id] = p.currentPosition;
+        }
+    });
+}
+
+function updatePieceVisual(playerId, index) {
+    const piece = document.getElementById(`player-${playerId}`);
+    const cell = document.getElementById(`cell-${index}`);
+    if (piece && cell) {
+        // 駒が重ならないよう、少しだけランダムにずらす
+        const offset = (playerId.length % 5) * 4;
+        piece.style.top = `${cell.offsetTop + 5 + offset}px`;
+        piece.style.left = `${cell.offsetLeft + 5 + offset}px`;
+    }
+}

@@ -1,15 +1,25 @@
 package com.example.application.ApplicationServer;
+
+import java.util.UUID;
 import lombok.Data;
 
 @Data
-public class player {
-    private int userId; //ユーザID
-    private int expectedCredits; //取得予定単位
-    private int earnedCredits; //取得単位
-    private int doubleDiceCount;    // ダブルダイスの目
-    private int justDiceCount;  //ジャストダイスの目
-    private int currentPlace; //現在の場所
-    private boolean isSkipped; //スキップ判定
+
+public class Player {
+    private String id;
+    private String name;
+    private String color;
+    private int currentPosition;
+    private int earnedUnits;
+    private int expectedUnits;
+
+    public Player(String name) {
+        this.id = UUID.randomUUID().toString(); // 重複しないIDを生成
+        this.name = name;
+        this.currentPosition = 0;
+        this.earnedUnits = 0;
+        this.expectedUnits = 25;
+    }
 }
 
    

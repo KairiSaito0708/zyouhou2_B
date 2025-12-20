@@ -1,24 +1,25 @@
 package com.example.application.ApplicationServer;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import lombok.Data;
 
-
+@Data
 public class Room {
-    private List<player> playerList;
-    
-    public void initPlayerList(){
+    private String roomId;
+    private List<Player> players = new ArrayList<>();
+    private int turnIndex = 0;
+    private final int MAX_PLAYERS = 4;
+
+    public Room() {
+        this.roomId = UUID.randomUUID().toString().substring(0, 5).toUpperCase();
     }
 
-    public void shuffleList(){
+    public void addPlayer(Player player) {
+        if (players.size() < MAX_PLAYERS) {
+            player.setColor("p" + players.size()); // p0, p1, p2, p3
+            players.add(player);
+        }
     }
-
-    public void executeOperation(){
-    }
-
-    public void notifyChangeData(){
-    }
-
-    public void skipCheck(){
-    }
-    
-
 }
