@@ -34,9 +34,22 @@ public class ClientManager {
     }
 
     @GetMapping("/score")
-    public String register() {
-        return "score";
+    public String showScore(HttpSession session, Model model) {
+    // 1. セッションからログイン中の名前を取得
+    String loginName = (String) session.getAttribute("loginName");
+
+    if (loginName != null) {
+        // 2. データベースからユーザー情報を検索
+        Optional<Account> userOpt = repository.findById(loginName);
+        
+        if (userOpt.isPresent()) {
+            // 3. データをModelに入れてHTMLに渡す
+            model.addAttribute("account", userOpt.get());
+        }
     }
+    
+    return "score"; // score.htmlを表示
+}
 
     @GetMapping("/rule")
     public String rule() {
@@ -47,6 +60,14 @@ public class ClientManager {
     public String result() {
         return "result";
     }
+
+@GetMapping("/logout")
+public String logout(HttpSession session) {
+    // セッションを無効化してログイン情報を消す
+    session.invalidate();
+    // ログイン画面（/）へリダイレクト
+    return "redirect:/";
+}
 
     
     @PostMapping("/login-process")
@@ -84,24 +105,12 @@ public class ClientManager {
 
         return "redirect:/"; 
     }
-    @GetMapping("/matchingwait")
-    public String matchingwait() {
-        return "matchingwait";
+    //追加しました（高村）
+
+    @GetMapping("/matchingWait")
+    public String matchingWait() {
+        return "matchingWait";
     }
 
-    // //ClientCommunicaterからのメッセージを解く
-    // public void receiveScreenOrder(int dest,int task){
-    //     switch (task) {
-    //         //clientCommunicaterから接続成功通知が来た場合
-    //         case 10:
-    //             ClienttoClientManagementmessage massage= new ClienttoClientManagementmessage();
-    //             massage.getauthentication(dest);
-                
-    //             break;
-        
-    //         default:
-    //             break;
-    //     }
-    // }
 
 }
