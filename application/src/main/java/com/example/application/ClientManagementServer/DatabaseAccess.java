@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.example.application.ClientManagementServer.Message.ClientMessage.GameRecord;
 
 public class DatabaseAccess {
 
@@ -53,26 +52,45 @@ public class DatabaseAccess {
             throw new RuntimeException("DB getLoginStatusByUsername failed", e);
         }
     }
-
-    public GameRecord getGameRecordByUsername(String username) {
-        final String sql = "SELECT win_count, lose_count FROM game_record WHERE username = ?";
+public RankRecord getRankRecordByUsername(String username) {
+        // accountテーブルからランク情報を取得するクエリ
+        final String sql = "SELECT rank1, rank2, rank3, rank4 FROM account WHERE username = ?";
+        
         try (Connection con = open();
-                PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
             ps.setString(1, username);
+            
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new GameRecord(
-                            rs.getInt("win_count"),
-                            rs.getInt("lose_count"));
+                    // 4つの順位カウントを読み取ってRecordを返す
+                    return new RankRecord(
+                        rs.getInt("rank1"),
+                        rs.getInt("rank2"),
+                        rs.getInt("rank3"),
+                        rs.getInt("rank4")
+                    );
                 } else {
-                    return new GameRecord(0, 0);
+                    return new RankRecord(0, 0, 0, 0);
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("DB getGameRecordByUsername failed", e);
+            throw new RuntimeException("DB getRankRecordByUsername failed", e);
         }
     }
 
+    // 前の手順で追加した更新用メソッド
+    public boolean incrementRankCount(String username, int rankNum) {
+        String columnName = "rank" + rankNum;
+        final String sql = "UPDATE account SET " + columnName + " = " + columnName + " + 1 WHERE username = ?";
+        try (Connection con = open();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, username);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            throw new RuntimeException("DB incrementRankCount failed", e);
+        }
+    }
     public User createUser(String username, String password, String id) {
         final String sql = "INSERT INTO account (id, username, password) VALUES (?, ?, ?)";
         try (Connection con = open();
