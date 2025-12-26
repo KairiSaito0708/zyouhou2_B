@@ -12,6 +12,8 @@ import com.example.application.Client.Repository.AccountRepository;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
 
@@ -124,6 +126,7 @@ public String logout(HttpSession session) {
         Account newAccount = new Account();
         newAccount.setUsername(name);
         newAccount.setPassword(pass);
+        newAccount.setId(UUID.randomUUID().toString());
         
         repository.save(newAccount); 
 

@@ -11,6 +11,7 @@ public class Account {
     @Id 
     private String username;
     private String password;
+    private String id; 
     private int rank1;
     private int rank2;
     private int rank3;
