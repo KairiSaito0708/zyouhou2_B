@@ -96,7 +96,6 @@ body {
 
 .player-piece {
     position: absolute; width: 4.5vmin; height: 4.5vmin;
-    background: radial-gradient(circle at 30% 30%, #ff4757, #c0392b); 
     border: 2px solid white; border-radius: 50%;
     z-index: 1000; transition: all 0.3s ease-in-out;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
@@ -105,3 +104,40 @@ body {
 .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
 .modal-content { background: #f9f9f9; padding: 25px; border-radius: 15px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 280px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
 .close-btn { position: absolute; right: 15px; top: 10px; font-size: 24px; cursor: pointer; color: #999; }
+
+.item-btn {
+    display: block; width: 100%; margin: 10px 0;
+    padding: 10px; background: #3498db; color: white;
+    border: none; border-radius: 5px; cursor: pointer;
+}
+.item-btn:hover { background: #2980b9; }
+#selected-item-display { font-size: 0.8rem; color: #e67e22; font-weight: bold; }
+
+.number-buttons {
+    display: flex;
+    justify-content: space-around;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.num-btn {
+    flex: 1;
+    padding: 8px;
+    background: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.num-btn:hover {
+    background: #e67e22;
+}
+
+.just-item-section {
+    background: rgba(0,0,0,0.05);
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}

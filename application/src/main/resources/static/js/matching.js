@@ -1,38 +1,4 @@
-<!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>マッチング待機中</title>
-    <link rel="stylesheet" th:href="@{/css/matchingwait.css}">
-</head>
-<body>
-    <div class="container">
-        <h1>マッチング中...</h1>
-        <p class="status-text">他のプレイヤーを待っています</p>
-
-        <div class="player-list">
-            <div class="player-slot connected" id="p1">
-                <div class="icon">👤</div>
-                <div class="name" th:text="${session.loginName}">ユーザ名</div>
-            </div>
-            <div class="player-slot" id="p2">
-                <div class="icon">?</div>
-                <div class="name">待機中...</div>
-            </div>
-            <div class="player-slot" id="p3">
-                <div class="icon">?</div>
-                <div class="name">待機中...</div>
-            </div>
-            <div class="player-slot" id="p4">
-                <div class="icon">?</div>
-                <div class="name">待機中...</div>
-            </div>
-        </div>
-
-        <a th:href="@{/start}" class="cancel-btn">キャンセル</a>
-    </div>
-    <script th:inline="javascript">
-        const loginName = /*[[${session.loginName}]]*/ 'Guest';
+const loginName = /*[[${session.loginName}]]*/ 'Guest';
     // パスから /app を抜く
     const socket = new WebSocket("ws://localhost:8080/client-management");
 
@@ -74,6 +40,3 @@
             }
         }
     }
-    </script>
-</body>
-</html>
