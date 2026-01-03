@@ -44,6 +44,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             // ② 駒の移動を実行
             updatePieceVisual(data.lastPlayerId, data.newPosition,pIndex);
 
+            if (data.eventMessage) {
+            // JavaScript標準のアラート
+            setTimeout(() => {
+                alert("【イベント発生】\n" + data.eventMessage);
+                
+                // 必要に応じて画面上の単位表示などを更新
+                document.getElementById('expected-units').innerText = data.expectedUnits;
+            }, 500); // 駒の移動が終わるのを少し待ってから表示
+        }
+
             // ③ 単位の更新（自分の番が終わった時、または誰かが動いた時）
             if (data.lastPlayerId === myPlayerId) {
                 earnedUnitsDisplay.innerText = data.earnedUnits;

@@ -76,13 +76,33 @@ public void processGameMessage(String json, Session session) {
         int currentTurnIndex = room.getTurnIndex();
         Player currentPlayer = room.getPlayers().get(currentTurnIndex);
 
+    if (currentPlayer.getId().equals(playerId) && currentPlayer.isSkipped()) {
+        System.out.println("[Game] " + playerId + " は休みです。");
+        currentPlayer.setSkipped(false); // フラグ解除
+
+        int nextIdx = (currentTurnIndex + 1) % room.getPlayers().size();
+        room.setTurnIndex(nextIdx);
+        Player nextPlayer = room.getPlayers().get(nextIdx);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("taskName", "GAME_UPDATE");
+        response.put("diceValue", "休み"); 
+        response.put("lastPlayerId", playerId);
+        response.put("newPosition", currentPlayer.getCurrentPosition());
+        response.put("earnedUnits", currentPlayer.getEarnedUnits());   // ✅ 追加
+        response.put("expectedUnits", currentPlayer.getExpectedUnits()); // ✅ 追加
+        response.put("nextPlayerId", nextPlayer.getId());
+        response.put("isGraduated", false);
+        response.put("message", playerId + " は一回休みです。");
+
+        broadcastToRoom(room, response);
+        return;
+    }
         // ✅ 手番チェックのログを追加
     if (!currentPlayer.getId().equals(playerId)) {
         System.out.println("[Game] 却下: " + playerId + " の番ではありません。現在の手番: " + currentPlayer.getId());
         return;
     }
-
-        if (!currentPlayer.getId().equals(playerId)) return;
 
         // --- ダイス実行 ---
         int rolledNumber = diceController.executeRoll(itemType, targetValue);
@@ -99,6 +119,26 @@ public void processGameMessage(String json, Session session) {
         int newPos = tempPos % 20;
         currentPlayer.setCurrentPosition(newPos);
 
+    GameEvent event = gameMap.getGameEvent(newPos);
+    if (event != null) {
+        // JavaScriptのアラートは使わず、System.out でサーバーにのみ表示
+        System.out.println("[Event発生] プレイヤー: " + playerId + " | マス: " + newPos + " | 内容: " + event.getEventContent());
+        
+        // イベントによる単位の増減を適用
+        int currentExpected = currentPlayer.getExpectedUnits();
+        int adjustment = event.getCreditAdjustmentValue();
+        currentPlayer.setExpectedUnits(currentExpected + adjustment);
+        
+        System.out.println("[Event適用] 予定単位が更新されました: " + currentExpected + " -> " + currentPlayer.getExpectedUnits());
+
+        // 特殊効果（一回休みなど）のログ出力
+        if (event.getEventEffect() == GameEvent.EFFECT_SKIP) {
+            System.out.println("[Event効果] " + playerId + " は次の一回休みが適用されます。");
+            currentPlayer.setSkipped(true);
+            currentPlayer.setExpectedUnits(currentExpected + adjustment);
+        }
+    }
+
         // ターン送り
         int nextTurnIndex = (currentTurnIndex + 1) % room.getPlayers().size();
         room.setTurnIndex(nextTurnIndex);
@@ -112,7 +152,8 @@ public void processGameMessage(String json, Session session) {
         response.put("lastPlayerId", playerId);
         response.put("diceValue", rolledNumber);
         response.put("newPosition", currentPlayer.getCurrentPosition());
-        response.put("earnedUnits", currentPlayer.getEarnedUnits()); 
+        response.put("earnedUnits", currentPlayer.getEarnedUnits());
+        response.put("expectedUnits", currentPlayer.getExpectedUnits());
         response.put("nextPlayerId", nextPlayer.getId());
         response.put("isGraduated", isGraduated);
 
