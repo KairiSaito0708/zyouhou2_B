@@ -26,7 +26,6 @@ public class GameMap {
         squareList.put(9, new GameEvent("道に迷った。1マス戻る", 0, GameEvent.EFFECT_BACK));
         squareList.put(19, new GameEvent("道に迷った。1マス戻る", 0, GameEvent.EFFECT_BACK));
     }
-
     /**
      * 指定された位置のイベントを取得する
      * @param position 現在のマス
