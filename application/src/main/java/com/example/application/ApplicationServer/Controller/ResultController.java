@@ -2,7 +2,6 @@ package com.example.application.ApplicationServer.Controller;
 
 import com.example.application.ApplicationServer.Entity.Player;
 import com.example.application.ApplicationServer.Entity.Room;
-import com.example.application.ClientManagementServer.Controller.DatabaseAccess;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
