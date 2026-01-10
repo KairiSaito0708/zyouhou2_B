@@ -3,11 +3,15 @@
 ## ServerAddress
 
 ClientManagemenetServer
+
 WebSocket:ws://IPアドレス:8080
+
 REST API:http://IPアドレス:8082
 
 ApplicationServer
+
 WebSocket:ws://IPアドレス:8081
+
 REST API:http://IPアドレス:8081
 
 ## IPアドレスの調べ方
@@ -38,6 +42,7 @@ CSSファイルは[src/main/resources/static/css]に入れる
 JSファイルは[src/main/resources/static/js]に入れる
 
 画像ファイルは[src/main/resources/static/images]に入れる
+
 
 
 
