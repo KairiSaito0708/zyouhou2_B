@@ -153,6 +153,11 @@ public class GameManagementController {
                 currentPlayer.setSkipped(true);
                 currentPlayer.setExpectedUnits(currentExpected + adjustment);
             }
+            else if (event.getEventEffect() == GameEvent.EFFECT_RECOVERY) {
+            System.out.println("[Event効果] " + playerId + " のアイテム使用制限をリセットします。");
+            currentPlayer.setUsedDouble(false);
+            currentPlayer.setUsedJust(false);
+        }
         }
 
         // ターン送り
