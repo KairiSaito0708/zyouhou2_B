@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import com.example.application.ApplicationServer.Entity.Player;
 import com.example.application.ApplicationServer.Entity.Room;
 
+// 結果画面を担当するコントローラクラス
 @Controller
 @RequiredArgsConstructor
 public class ResultController {

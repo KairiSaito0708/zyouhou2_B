@@ -11,6 +11,8 @@ import com.google.gson.Gson;
 
 import jakarta.websocket.Session;
 
+// ゲームの大部分を担当するコントローラクラス(WebSocket経由)
+// ブラウザと常に接続し続ける双方向通信を担当するEndpointクラスから呼び出される
 public class GameManagementController {
     private final Gson gson = new Gson();
     private final DiceController diceController = new DiceController();
@@ -168,6 +170,11 @@ public class GameManagementController {
                 currentPlayer.setSkipped(true);
                 currentPlayer.setExpectedUnits(currentExpected + adjustment);
             }
+            else if (event.getEventEffect() == GameEvent.EFFECT_RECOVERY) {
+            System.out.println("[Event効果] " + playerId + " のアイテム使用制限をリセットします。");
+            currentPlayer.setUsedDouble(false);
+            currentPlayer.setUsedJust(false);
+        }
         }
 
         // ターン送り
