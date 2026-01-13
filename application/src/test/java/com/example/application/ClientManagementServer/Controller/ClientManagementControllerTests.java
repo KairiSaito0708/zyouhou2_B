@@ -1,4 +1,4 @@
-package com.example.application;
+package com.example.application.ClientManagementServer.Controller;
 
 import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.Test;
