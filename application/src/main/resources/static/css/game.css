@@ -123,7 +123,8 @@ body {
     grid-row: 3; 
 } 
  #cell-10 {
-    font-size: 30px; 
+    font-size: 30px;
+    background: rgb(36, 254, 36);
     grid-column: 8; 
     grid-row: 4; 
 }
@@ -147,6 +148,7 @@ body {
 } 
 #cell-14 { 
     font-size: 30px;
+    background: rgb(36, 254, 36);
     grid-column: 4; 
     grid-row: 4; 
 }
